@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin
+spec:
+  selector:
+    matchLabels:
+      app: pgadmin
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+      - name: pgadmin
+        image: dpage/pgadmin4
+        env:
+          - name: PGADMIN_DEFAULT_EMAIL
+            value: davutozcan87@gmail.com
+          - name: PGADMIN_DEFAULT_PASSWORD
+            value: password
+        ports:
+          - containerPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  pgadmin
+spec:
+  selector:
+    app:  pgadmin
+  type:  NodePort
+  ports:
+  - name:  pgadmin
+    port:  80
+    targetPort:  80
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: pgadmin
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: pgadmin-dev.denemapp.online
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - pgadmin-dev.denemapp.online
+    secretName: pgadmin-tls
+  rules:
+    - host: pgadmin-dev.denemapp.online
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: pgadmin
+              servicePort: 80
