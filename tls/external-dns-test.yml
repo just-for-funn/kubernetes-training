@@ -42,8 +42,8 @@ metadata:
 spec:
   tls:
     - hosts:
-       - pgadmin-dev.denemapp.online
-      secretName: pgadmin-tls
+       - nginx.craftdemo.online
+      secretName: nginx-tls
   rules:
     - host: nginx.craftdemo.online
       http:
