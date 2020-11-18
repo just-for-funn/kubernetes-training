@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: svcpod
   labels:
-    name: svcpod
+    app: svcpod
 spec:
   containers:
     - image: luksa/kubia
@@ -22,7 +22,7 @@ spec:
     - port: 80
       targetPort: 8080
   selector:
-    name: svcpod
+    app: svcpod
 ---
 apiVersion: v1
 kind: Service
@@ -34,7 +34,7 @@ spec:
     - port: 80
       targetPort: 8080
   selector:
-    name: svcpod
+    app: svcpod
 ---
 apiVersion: v1
 kind: Service
@@ -45,7 +45,7 @@ spec:
     - port: 80
       targetPort: 8080
   selector:
-    name: svcpod
+    app: svcpod
 ---
 apiVersion: v1
 kind: Service
@@ -53,7 +53,7 @@ metadata:
   name: demo-clusterip
 spec:
   selector:
-    name: svcpod
+    app: svcpod
   type: ClusterIP
   ports:
     - protocol: TCP
