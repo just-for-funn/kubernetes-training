@@ -9,6 +9,17 @@ spec:
       volumeMounts:
         - mountPath: /opt/output
           name: output
+    - name: worker
+      image: busybox
+      command: ["/bin/sh","-c"]
+      volumeMounts:
+        - mountPath: /opt/output
+          name: output
+      args:
+        - while true;
+          do echo $(date) >> /opt/output/$(date "+%Y-%m-%d_%H-%M-%S");
+          sleep 10;
+          done
   volumes:
     - name: output
       persistentVolumeClaim:
