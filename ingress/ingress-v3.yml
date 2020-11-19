@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: demo-ingress-3
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: web3.craftdemo.online
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - web3.craftdemo.online
+      secretName: ingressv3-tls
+  rules:
+    - host: web3.craftdemo.online
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: pvc-ui
+              servicePort: 80
