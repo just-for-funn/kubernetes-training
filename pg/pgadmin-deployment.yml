@@ -19,7 +19,10 @@ spec:
           - name: PGADMIN_DEFAULT_EMAIL
             value: davutozcan87@gmail.com
           - name: PGADMIN_DEFAULT_PASSWORD
-            value: password
+            valueFrom:
+              secretKeyRef:
+                name: pgsecret
+                key: password
         ports:
           - containerPort: 80
 ---
@@ -30,7 +33,7 @@ metadata:
 spec:
   selector:
     app:  pgadmin
-  type:  NodePort
+  type:  ClusterIP
   ports:
   - name:  pgadmin
     port:  80
