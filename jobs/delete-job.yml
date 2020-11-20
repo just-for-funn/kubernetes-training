@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: batch-job
+spec:
+  template:
+    metadata:
+      labels:
+        app: batch-job
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: main
+          image: busybox
+          command: ["/bin/sh","-c"]
+          args:
+            - "rm  /opt/output/2020*"
+          volumeMounts:
+            - mountPath: /opt/output
+              name: output
+      volumes:
+        - name: output
+          persistentVolumeClaim:
+            claimName: job-pvc
