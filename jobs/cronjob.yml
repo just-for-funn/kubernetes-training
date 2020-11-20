@@ -1,0 +1,27 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: demo-cronjob
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: periodic-batch-job
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: main
+              image: busybox
+              command: [ "/bin/sh","-c" ]
+              args:
+                - "rm  /opt/output/2020*; echo completed $(date);"
+              volumeMounts:
+                - mountPath: /opt/output
+                  name: output
+          volumes:
+            - name: output
+              persistentVolumeClaim:
+                claimName: job-pvc
